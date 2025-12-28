@@ -1,0 +1,47 @@
+# Build results
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+
+# Dependencies
+packages/
+.nuget/
+
+# Entity Framework
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+appsettings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Testing
+TestResults/
+coverage/
+
+# Published files
+publish/
+PublishProfiles/
