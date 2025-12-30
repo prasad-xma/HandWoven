@@ -27,4 +27,7 @@ public class Shop
 
     public int UserId {get; set;} // owner
     public User User {get; set;} = null!;
+
+    public ICollection<Product> Products { get; set; } = new List<Product>();
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }
