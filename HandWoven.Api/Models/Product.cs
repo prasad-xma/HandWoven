@@ -38,5 +38,5 @@ public class Product
     public int ShopId { get; set; }
     public Shop Shop { get; set; } = null!;
 
-    
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }
