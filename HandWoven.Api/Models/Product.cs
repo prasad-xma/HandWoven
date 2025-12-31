@@ -14,7 +14,7 @@ public class Product
     [Required]
     public string Description {get; set; } = null!;
 
-    public string? ProductImgUrl { get; set; }
+    // public string? ProductImgUrl { get; set; }
 
     [Required]
     public decimal Price { get; set; }
@@ -39,4 +39,6 @@ public class Product
     public Shop Shop { get; set; } = null!;
 
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<ProductImage> Images {get; set;} = new List<ProductImage>();
+    public ICollection<Promotion> Promotions {get; set; } = new List<Promotion>();
 }

@@ -33,6 +33,13 @@ public class User
     public int? ShopId { get; set;}
     public Shop? Shop { get; set; }
 
-    // reviews
+    // relations
+    
+    public SellerProfile? SellerProfile {get; set;}
+    public ICollection<Wishlist> Wishlists { get; set; } = new List<Wishlist>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<Cart> Carts { get; set; } = new List<Cart>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<ShippingAddress> ShippingAddresses { get; set; } = new List<ShippingAddress>();
+
 }
