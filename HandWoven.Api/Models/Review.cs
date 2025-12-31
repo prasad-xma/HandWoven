@@ -22,4 +22,6 @@ public class Review
 
     public int ShopId { get; set; }
     public Shop Shop { get; set; } = null!;
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
