@@ -30,8 +30,8 @@ public class User
 
     public UserStatus UserStatus { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public int? ShopId { get; set;}
-    public Shop? Shop { get; set; }
+    // public int? ShopId { get; set;}
+    public Shop? Shop { get; set; } // one to one
 
     // relations
     
