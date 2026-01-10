@@ -42,12 +42,21 @@ public class AppDbContext : DbContext
             .HasForeignKey<SellerProfile>(sp => sp.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // User ↔ Shop (ONE-TO-ONE : owner)
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Shop)
+            .WithOne(s => s.User)
+            .HasForeignKey<Shop>(s => s.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
         // Shop
+        /*
         modelBuilder.Entity<Shop>()
             .HasOne(s => s.User)
             .WithMany()
             .HasForeignKey(s => s.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict); */
 
 
         // Product
