@@ -86,6 +86,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// seed Admin User --------------------------------
+using (var scope = app.Services.CreateScope())
+{
+    var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
+    await authService.SeedAdminAsync();
+}
+
 // Middleware
 if (app.Environment.IsDevelopment())
 {
