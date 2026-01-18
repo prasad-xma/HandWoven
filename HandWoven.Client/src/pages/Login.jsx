@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 import {login} from "../auth/AuthService";
-import { AuthProvider } from '../context/AuthProvider';
+// import { AuthProvider } from '../context/AuthProvider';
+import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const { loginUser } = useContext(AuthProvider);
+  const { loginUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ function Login() {
     try {
       const res = await login({email, password});
       loginUser(res.token);
+      // console.log(res.token);
       navigate("/dashboard");
       
     } catch (err) {
@@ -31,7 +33,9 @@ function Login() {
       {/* Email */}
       <input type="email" placeholder='your email...' onChange={e => setEmail(e.target.value)} />
       {/* password */}
+      <br />
       <input type="password" placeholder='Your password...' onChange={e => setPassword(e.target.value)} />
+      <br /><button type="submit">Submit</button>
     </form>
   );
 };

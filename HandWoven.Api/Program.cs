@@ -72,6 +72,7 @@ builder.Services.AddSwaggerGen();
 
 // CROS for react frontend --------------------------------------
 
+/*
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -81,6 +82,19 @@ builder.Services.AddCors(options =>
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         }
+    );
+}); */
+
+// allow only handwoven client
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowHandWovenClient",
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    }
     );
 });
 
@@ -100,9 +114,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
-app.UseCors("AllowAll");
+
+app.UseCors("AllowHandWovenClient");
 
 app.UseAuthentication();
 app.UseAuthorization();
