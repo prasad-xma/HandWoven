@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {login} from "../auth/AuthService";
+import { AuthProvider } from '../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+  const { loginUser } = useContext(AuthProvider);
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,8 +15,8 @@ function Login() {
 
     try {
       const res = await login({email, password});
-      localStorage.setItem("token", res.token);
-      alert("Login Successful");
+      loginUser(res.token);
+      navigate("/dashboard");
       
     } catch (err) {
       alert("Login Failed");
