@@ -23,11 +23,13 @@
     <Folder Include="Configurations\" />
     <Folder Include="Controllers\" />
     <Folder Include="Data\" />
+    <Folder Include="DTOs\Seller\" />
     <Folder Include="Helpers\" />
     <Folder Include="Middleware\" />
     <Folder Include="Models\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Auth\" />
+    <Folder Include="Services\Seller\" />
   </ItemGroup>
 
 </Project>
