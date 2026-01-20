@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 
 import Home from './pages/Home';
 import ProtectedRoute from './auth/ProtectedRoute';
+import SellerRegister from './pages/SellerRegister';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           </ProtectedRoute>
 
         } />
+        <Route path='/seller/register' element={<SellerRegister />} />
     </Routes>
 
   );
