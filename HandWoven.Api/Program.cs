@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HandWoven.Api.Services.Auth;
 using HandWoven.Api.Helpers;
+using HandWoven.Api.Services.Seller;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtTokenGenerator>();
 
+// seller service
+builder.Services.AddScoped<ISellerService, SellerService>();
 
 
 // Swagger (API Testing) ---------------------------------
