@@ -38,6 +38,7 @@ const SellerRegister = () => {
     
     return (
         <div>
+            <button className='mb-4 cursor-pointer' onClick={() => navigate("/dashboard")}>Dashboard</button>
             <h2>Seller Registration</h2>
 
             <form onSubmit={handleSubmit}>
@@ -66,7 +67,8 @@ const SellerRegister = () => {
                 <input type="text" name="SocialAcc" onChange={handleChange} placeholder='SocialAcc..' />
                 <br />
                 <textarea name='bio' placeholder='Shop Bio...' onChange={handleChange} />
-
+                <br /><br />
+                <button type="submit">Register Seller</button>
             </form>
         </div>
     );
