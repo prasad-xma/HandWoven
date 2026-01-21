@@ -11,7 +11,6 @@ using HandWoven.Api.Services.Product;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Database MySQL and Pomelo
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -66,6 +65,7 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 
 // seller service
 builder.Services.AddScoped<ISellerService, SellerService>();
+builder.Services.AddScoped<ISellerProductImageService, SellerProductImageService>();
 // product service
 builder.Services.AddScoped<IProductService, ProductService>();
 
@@ -125,6 +125,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseStaticFiles();
 
 app.UseCors("AllowHandWovenClient");
 
