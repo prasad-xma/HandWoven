@@ -7,6 +7,7 @@ using System.Text;
 using HandWoven.Api.Services.Auth;
 using HandWoven.Api.Helpers;
 using HandWoven.Api.Services.Seller;
+using HandWoven.Api.Services.Product;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,8 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 
 // seller service
 builder.Services.AddScoped<ISellerService, SellerService>();
+// product service
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 // Swagger (API Testing) ---------------------------------
