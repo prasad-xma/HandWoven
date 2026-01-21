@@ -17,7 +17,7 @@ public class ProductService : IProductService
         _context = context;
     }
 
-    public async Task CreateProductAsync(int sellerId, ProductCreateDto dto)
+    public async Task<int> CreateProductAsync(int sellerId, ProductCreateDto dto)
     {
         var shop = await _context.Shops
             .FirstOrDefaultAsync(s => s.UserId == sellerId);
@@ -44,6 +44,8 @@ public class ProductService : IProductService
 
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
+
+        return product.ProductId;
     }
 
     public async Task<List<Models.Product>> GetMyProductAsync(int sellerId)

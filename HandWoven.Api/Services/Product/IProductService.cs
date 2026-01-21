@@ -5,7 +5,7 @@ using HandWoven.Api.Models;
 
 public interface IProductService
 {
-    Task CreateProductAsync(int sellerId, ProductCreateDto dto);
+    Task<int> CreateProductAsync(int sellerId, ProductCreateDto dto);
     Task<List<Product>> GetMyProductAsync(int sellerId);
     Task UpdateAvailabilityAsync(int sellerId, int productId, ProductStatus status);
 }
