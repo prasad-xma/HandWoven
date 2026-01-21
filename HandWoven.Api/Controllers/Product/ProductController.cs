@@ -23,7 +23,9 @@ namespace HandWoven.Api.Controllers.Product
         public async Task<IActionResult> Create(ProductCreateDto dto)
         {
             var sellerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            return Ok(new { message = "Product Created Successfully!"});
+            var productId = await _service.CreateProductAsync(sellerId, dto);
+
+            return Ok(new { message = "Product Created Successfully!", productId });
         }
 
         [HttpGet("mine")]
