@@ -22,13 +22,17 @@
   <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Controllers\Product\" />
+    <Folder Include="Controllers\Seller\" />
     <Folder Include="Data\" />
+    <Folder Include="DTOs\Product\" />
     <Folder Include="DTOs\Seller\" />
     <Folder Include="Helpers\" />
     <Folder Include="Middleware\" />
     <Folder Include="Models\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Auth\" />
+    <Folder Include="Services\Product\" />
     <Folder Include="Services\Seller\" />
   </ItemGroup>
 
