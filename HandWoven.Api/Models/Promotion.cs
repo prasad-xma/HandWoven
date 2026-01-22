@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace HandWoven.Api.Models;
 
@@ -9,6 +10,7 @@ public class Promotion
     public int PromoId { get; set; }
 
     public int ProductId { get; set; }
+    [JsonIgnore]
     public Product Product { get; set; } = null!;
 
     [Required]
