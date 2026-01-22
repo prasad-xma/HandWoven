@@ -8,6 +8,7 @@ using HandWoven.Api.Services.Auth;
 using HandWoven.Api.Helpers;
 using HandWoven.Api.Services.Seller;
 using HandWoven.Api.Services.Product;
+using HandWoven.Api.Services.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,8 @@ builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<ISellerProductImageService, SellerProductImageService>();
 // product service
 builder.Services.AddScoped<IProductService, ProductService>();
+// user service
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 // Swagger (API Testing) ---------------------------------
