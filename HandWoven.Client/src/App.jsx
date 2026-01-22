@@ -12,6 +12,7 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import SellerRegister from './pages/SellerRegister';
 import SellerDashboard from './pages/SellerDashboard';
 import AddProduct from './pages/product/AddProduct';
+import ProductDetails from './pages/product/ProductDetails';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
         <Route path='/seller/register' element={<SellerRegister />} />
         <Route path='/seller/s-dashboard' element={<SellerDashboard />} />
         <Route path='/seller/addproduct' element={<AddProduct />} />
+        <Route path='/seller/product/:productId' element={<ProductDetails />} />
     </Routes>
 
   );
