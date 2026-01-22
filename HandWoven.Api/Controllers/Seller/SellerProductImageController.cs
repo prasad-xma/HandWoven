@@ -25,4 +25,12 @@ public class SellerProductImageController : ControllerBase
         await _service.UploadImagesAsync(sellerId, dto);
         return Ok(new { message = "Images uploaded" });
     }
+
+    [HttpDelete("{productImageId:int}")]
+    public async Task<IActionResult> Delete(int productImageId)
+    {
+        var sellerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        await _service.DeleteImageAsync(sellerId, productImageId);
+        return Ok(new { message = "Image deleted" });
+    }
 }

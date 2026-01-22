@@ -62,4 +62,37 @@ public class SellerProductImageService : ISellerProductImageService
 
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteImageAsync(int sellerId, int productImageId)
+    {
+        var image = await _context.ProductImages
+            .Include(pi => pi.Product)
+            .ThenInclude(p => p.Shop)
+            .FirstOrDefaultAsync(pi => pi.ProductImageId == productImageId);
+
+        if (image == null)
+        {
+            throw new Exception("Image not found!");
+        }
+
+        if (image.Product?.Shop?.UserId != sellerId)
+        {
+            throw new UnauthorizedAccessException("Not your product");
+        }
+
+        var imageUrl = image.ImageUrl;
+
+        _context.ProductImages.Remove(image);
+        await _context.SaveChangesAsync();
+
+        if (!string.IsNullOrWhiteSpace(imageUrl) && imageUrl.StartsWith("/uploads/products/"))
+        {
+            var relativePath = imageUrl.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+            var filePath = Path.Combine(_env.WebRootPath, relativePath);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+    }
 }
