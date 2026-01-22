@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-const ProductCard = ({ product, onClick, footer }) => {
+const ProductCard = ({ product, onClick, footer, onViewDetails, viewButtonLabel }) => {
   const apiBaseUrl = useMemo(() => {
     const base = import.meta.env?.VITE_API_BASE_URL;
     
@@ -40,6 +40,18 @@ const ProductCard = ({ product, onClick, footer }) => {
           </span>
         </div>
         <div className="text-sm text-gray-600 mt-1">${product.price}</div>
+        {(onViewDetails || onClick) && (
+          <button
+            className="mt-2 border px-3 py-1 text-sm rounded hover:bg-blue-50"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onViewDetails) onViewDetails();
+              else if (onClick) onClick();
+            }}
+          >
+            {viewButtonLabel || "View Details"}
+          </button>
+        )}
         {footer && <div className="mt-3" onClick={(e) => e.stopPropagation()}>{footer}</div>}
       </div>
     </div>

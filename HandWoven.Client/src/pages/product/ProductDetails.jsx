@@ -8,6 +8,8 @@ import {
   listPromotions,
   createPromotion,
   deletePromotion,
+  uploadProductImages,
+  deleteProductImage,
 } from "../../api/productApi";
 
 import PromotionForm from "./components/PromotionForm";
@@ -22,6 +24,8 @@ const ProductDetails = () => {
   const [saving, setSaving] = useState(false);
   const [promotions, setPromotions] = useState([]);
   const [editing, setEditing] = useState(false);
+  const [newImages, setNewImages] = useState([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
 
   const [form, setForm] = useState({
     productName: "",
@@ -73,7 +77,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [productId]);
 
   const handleChange = (e) => {
@@ -101,8 +105,10 @@ const ProductDetails = () => {
       await load();
     } catch (err) {
       toast.error(err?.response?.data?.message || err?.message || "Update failed");
+
     } finally {
       setSaving(false);
+
     }
   };
 
@@ -114,7 +120,9 @@ const ProductDetails = () => {
       await deleteProduct(productId);
       toast.success("Product deleted");
       navigate("/seller/s-dashboard");
+
     } catch (err) {
+
       toast.error(err?.response?.data?.message || err?.message || "Delete failed");
     }
   };
@@ -126,6 +134,7 @@ const ProductDetails = () => {
       const data = await listPromotions(productId);
       setPromotions(Array.isArray(data) ? data : []);
     } catch (err) {
+
       toast.error(err?.response?.data?.message || err?.message || "Failed to create promotion");
     }
   };
@@ -137,19 +146,61 @@ const ProductDetails = () => {
       const data = await listPromotions(productId);
       setPromotions(Array.isArray(data) ? data : []);
     } catch (err) {
+
       toast.error(err?.response?.data?.message || err?.message || "Failed to delete promotion");
     }
   };
 
+  const handleUploadImages = async () => {
+    if (!newImages || newImages.length === 0) return;
+    setUploadingImages(true);
+    
+    try {
+      await uploadProductImages(productId, newImages);
+      toast.success("Images uploaded");
+      setNewImages([]);
+      await load();
+
+    } catch (err) {
+
+      toast.error(err?.response?.data?.message || err?.message || "Failed to upload images");
+    } finally {
+
+      setUploadingImages(false);
+    }
+  };
+
+  const handleDeleteImage = async (productImageId) => {
+    const ok = confirm("Delete this image?");
+    if (!ok) return;
+
+    try {
+      await deleteProductImage(productImageId);
+      toast.success("Image deleted");
+      await load();
+    } catch (err) {
+
+      toast.error(err?.response?.data?.message || err?.message || "Failed to delete image");
+    }
+  };
+
   if (loading) {
-    return <div className="p-4">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-6xl mx-auto p-4 sm:p-6">
+          <div className="border border-gray-200 bg-white rounded-lg p-4 text-gray-700 animate-pulse">Loading...</div>
+        </div>
+      </div>
+    );
   }
 
   if (!product) {
     return (
-      <div className="p-4">
-        <button className="border px-3 py-2" onClick={() => navigate(-1)}>Back</button>
-        <div className="mt-4 text-red-600">Product not found</div>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-6xl mx-auto p-4 sm:p-6">
+          <button className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 hover:bg-gray-50" onClick={() => navigate(-1)}>Back</button>
+          <div className="mt-4 text-red-600">Product not found</div>
+        </div>
       </div>
     );
   }
@@ -157,114 +208,177 @@ const ProductDetails = () => {
   const images = product.images || [];
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <button className="border px-3 py-2" onClick={() => navigate(-1)}>Back</button>
-        <div className="flex items-center gap-2">
-          {!editing && (
-            <button className="border px-3 py-2" onClick={() => setEditing(true)}>Edit</button>
-          )}
-          <button className="border px-3 py-2 text-white bg-red-600" onClick={handleDelete}>Delete</button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <div>
+            <button
+              className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 hover:bg-gray-50"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </button>
+            <div className="mt-3">
+              <div className="text-2xl font-semibold text-gray-900">{product.productName}</div>
+              <div className="text-sm text-gray-600 mt-1">Manage details, images and promotions</div>
+            </div>
+          </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Images */}
-        <div className="lg:col-span-2">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {images.length === 0 && (
-              <div className="col-span-full text-sm text-gray-500">No images</div>
+          <div className="flex items-center gap-2">
+            {!editing && (
+              <button
+                className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 hover:bg-gray-50"
+                onClick={() => setEditing(true)}
+              >
+                Edit
+              </button>
             )}
-            {images.map((img) => (
-              <div key={img.productImageId} className="aspect-video bg-gray-100 overflow-hidden">
-                <img src={resolveImg(img.imageUrl)} alt={product.productName} className="w-full h-full object-cover" />
-              </div>
-            ))}
+            <button
+              className="inline-flex items-center justify-center rounded-md bg-red-600 text-white px-4 py-2 hover:bg-red-700"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
           </div>
         </div>
 
-        {/* Details */}
-        <div className="lg:col-span-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <div className="font-semibold text-gray-900">Images</div>
+                <div className="text-sm text-gray-600">{images.length} image(s)</div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {images.length === 0 && (
+                  <div className="col-span-full text-sm text-gray-500">No images</div>
+                )}
+                {images.map((img) => (
+                  <div key={img.productImageId} className="group relative rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                    <div className="aspect-video">
+                      <img src={resolveImg(img.imageUrl)} alt={product.productName} className="w-full h-full object-cover" />
+                    </div>
+                    <button
+                      className="absolute top-2 right-2 hidden group-hover:inline-flex items-center justify-center rounded-md bg-white/90 text-gray-900 px-2 py-1 text-xs border border-gray-200 hover:bg-white"
+                      onClick={() => handleDeleteImage(img.productImageId)}
+                      type="button"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 border-t border-gray-100 pt-4">
+                <div className="text-sm font-medium text-gray-900">Add new images</div>
+                <div className="text-sm text-gray-600 mt-1">Upload additional images for this product.</div>
+                <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                  <input
+                    className="block w-full text-sm"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => setNewImages(Array.from(e.target.files || []))}
+                  />
+                  <button
+                    className="inline-flex items-center justify-center rounded-md bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 disabled:opacity-50"
+                    type="button"
+                    disabled={uploadingImages || newImages.length === 0}
+                    onClick={handleUploadImages}
+                  >
+                    {uploadingImages ? "Uploading..." : "Upload"}
+                  </button>
+                </div>
+                {newImages.length > 0 && (
+                  <div className="mt-2 text-xs text-gray-600">Selected: {newImages.length} file(s)</div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-1 space-y-4">
           {!editing ? (
-            <div className="space-y-2 p-3 border rounded-md bg-white">
-              <div className="text-lg font-semibold">{product.productName}</div>
-              <div className="text-gray-700 whitespace-pre-wrap">{product.description}</div>
-              <div className="text-sm">Price: ${product.price}</div>
-              <div className="text-sm">Qty: {product.quantity}</div>
+            <div className="space-y-2 p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
+              <div className="text-lg font-semibold text-gray-900">Details</div>
+              <div className="text-sm text-gray-700 whitespace-pre-wrap">{product.description}</div>
+              <div className="text-sm text-gray-800">Price: ${product.price}</div>
+              <div className="text-sm text-gray-800">Qty: {product.quantity}</div>
               {product.discountPrice != null && (
-                <div className="text-sm">Discount: ${product.discountPrice}</div>
+                <div className="text-sm text-gray-800">Discount: ${product.discountPrice}</div>
               )}
               {product.weight != null && (
-                <div className="text-sm">Weight: {product.weight}</div>
+                <div className="text-sm text-gray-800">Weight: {product.weight}</div>
               )}
               {product.dimensions && (
-                <div className="text-sm">Dimensions: {product.dimensions}</div>
+                <div className="text-sm text-gray-800">Dimensions: {product.dimensions}</div>
               )}
               {product.materialType && (
-                <div className="text-sm">Material: {product.materialType}</div>
+                <div className="text-sm text-gray-800">Material: {product.materialType}</div>
               )}
               {product.hashTags && (
-                <div className="text-sm"># {product.hashTags}</div>
+                <div className="text-sm text-gray-800"># {product.hashTags}</div>
               )}
             </div>
           ) : (
-            <form onSubmit={handleSave} className="space-y-3 p-3 border rounded-md bg-white">
+            <form onSubmit={handleSave} className="space-y-3 p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
               <div>
-                <label className="block">Product Name</label>
-                <input className="border p-2 w-full" name="productName" value={form.productName} onChange={handleChange} required />
+                <label className="block text-sm font-medium text-gray-900">Product Name</label>
+                <input className="border border-gray-300 rounded-md p-2 w-full" name="productName" value={form.productName} onChange={handleChange} required />
               </div>
               <div>
-                <label className="block">Description</label>
-                <textarea className="border p-2 w-full" name="description" value={form.description} onChange={handleChange} required />
+                <label className="block text-sm font-medium text-gray-900">Description</label>
+                <textarea className="border border-gray-300 rounded-md p-2 w-full" name="description" value={form.description} onChange={handleChange} required />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block">Price</label>
-                  <input className="border p-2 w-full" type="number" step="0.01" name="price" value={form.price} onChange={handleChange} required />
+                  <label className="block text-sm font-medium text-gray-900">Price</label>
+                  <input className="border border-gray-300 rounded-md p-2 w-full" type="number" step="0.01" name="price" value={form.price} onChange={handleChange} required />
                 </div>
                 <div>
-                  <label className="block">Quantity</label>
-                  <input className="border p-2 w-full" type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block">Discount Price</label>
-                  <input className="border p-2 w-full" type="number" step="0.01" name="discountPrice" value={form.discountPrice} onChange={handleChange} />
-                </div>
-                <div>
-                  <label className="block">Weight</label>
-                  <input className="border p-2 w-full" type="number" step="0.01" name="weight" value={form.weight} onChange={handleChange} />
+                  <label className="block text-sm font-medium text-gray-900">Quantity</label>
+                  <input className="border border-gray-300 rounded-md p-2 w-full" type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block">Dimensions</label>
-                  <input className="border p-2 w-full" name="dimensions" value={form.dimensions} onChange={handleChange} />
+                  <label className="block text-sm font-medium text-gray-900">Discount Price</label>
+                  <input className="border border-gray-300 rounded-md p-2 w-full" type="number" step="0.01" name="discountPrice" value={form.discountPrice} onChange={handleChange} />
                 </div>
                 <div>
-                  <label className="block">Material Type</label>
-                  <input className="border p-2 w-full" name="materialType" value={form.materialType} onChange={handleChange} />
+                  <label className="block text-sm font-medium text-gray-900">Weight</label>
+                  <input className="border border-gray-300 rounded-md p-2 w-full" type="number" step="0.01" name="weight" value={form.weight} onChange={handleChange} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-900">Dimensions</label>
+                  <input className="border border-gray-300 rounded-md p-2 w-full" name="dimensions" value={form.dimensions} onChange={handleChange} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-900">Material Type</label>
+                  <input className="border border-gray-300 rounded-md p-2 w-full" name="materialType" value={form.materialType} onChange={handleChange} />
                 </div>
               </div>
               <div>
-                <label className="block">Hashtags</label>
-                <input className="border p-2 w-full" name="hashTags" value={form.hashTags} onChange={handleChange} />
+                <label className="block text-sm font-medium text-gray-900">Hashtags</label>
+                <input className="border border-gray-300 rounded-md p-2 w-full" name="hashTags" value={form.hashTags} onChange={handleChange} />
               </div>
               <div className="flex gap-2">
-                <button className="bg-blue-600 text-white px-4 py-2 disabled:opacity-50" type="submit" disabled={saving}>{saving ? "Saving..." : "Save"}</button>
-                <button className="border px-4 py-2" type="button" onClick={() => setEditing(false)}>Cancel</button>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50" type="submit" disabled={saving}>{saving ? "Saving..." : "Save"}</button>
+                <button className="border border-gray-300 bg-white px-4 py-2 rounded-md hover:bg-gray-50" type="button" onClick={() => setEditing(false)}>Cancel</button>
               </div>
             </form>
           )}
 
           {/* Promotions */}
-          <div className="mt-6 p-3 border rounded-md bg-white">
-            <div className="font-semibold mb-2">Promotions</div>
+          <div className="p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
+            <div className="font-semibold mb-2 text-gray-900">Promotions</div>
             <PromotionForm onCreate={handleCreatePromotion} />
             <PromotionList promotions={promotions} onDelete={handleDeletePromotion} />
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
