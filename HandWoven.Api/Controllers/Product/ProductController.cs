@@ -35,6 +35,30 @@ namespace HandWoven.Api.Controllers.Product
             return Ok(await _service.GetMyProductAsync(sellerId));
         }
 
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetById(int productId)
+        {
+            var sellerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var product = await _service.GetByIdAsync(sellerId, productId);
+            return Ok(product);
+        }
+
+        [HttpPatch("{productId}")]
+        public async Task<IActionResult> Update(int productId, ProductUpdateDto dto)
+        {
+            var sellerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            await _service.UpdateProductAsync(sellerId, productId, dto);
+            return Ok(new { message = "Product updated" });
+        }
+
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> Delete(int productId)
+        {
+            var sellerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            await _service.DeleteProductAsync(sellerId, productId);
+            return Ok(new { message = "Product deleted" });
+        }
+
         [HttpPatch("{productId}/availability")]
         public async Task<IActionResult> UpdateAvailability(int productId, ProductIsActiveDto dto)
         {
