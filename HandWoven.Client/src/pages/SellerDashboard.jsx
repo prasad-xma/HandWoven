@@ -51,64 +51,101 @@ const SellerDashboard = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold">Seller Dashboard</h1>
-        <button className="cursor-pointer border px-3 py-2" onClick={() => navigate("/seller/addproduct")}>Add Product</button>
-      </div>
-
-      {isLoading && <div>Loading...</div>}
-
-      {!isLoading && products.length === 0 && (
-        <div className="border p-4">
-          <div className="font-semibold">No products yet</div>
-          <div className="text-sm">Create your first product to see it here.</div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <div>
+            <h1 className="text-2xl font-semibold text-gray-900">Seller Dashboard</h1>
+            <div className="text-sm text-gray-600 mt-1">Manage your products and availability</div>
+          </div>
+          <button
+            className="cursor-pointer inline-flex items-center justify-center rounded-md bg-gray-900 text-white px-4 py-2 hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-900/30"
+            onClick={() => navigate("/seller/addproduct")}
+          >
+            Add Product
+          </button>
         </div>
-      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {products.map((p) => {
-          const isActive = p?.isActive === 1 || p?.isActive === "Active";
-          const cover = p?.images?.[0]?.imageUrl ? resolveImg(p.images[0].imageUrl) : null;
+        {isLoading && (
+          <div className="border border-gray-200 bg-white rounded-lg p-4 text-gray-700 animate-pulse">
+            Loading products...
+          </div>
+        )}
 
-          return (
-            <div key={p.productId} className="border p-3">
-              <div className="flex gap-3">
-                <div className="w-24 h-24 border flex items-center justify-center overflow-hidden bg-gray-50">
-                  {cover ? (
-                    <img src={cover} alt={p.productName} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="text-xs text-gray-500">No Image</div>
-                  )}
+        {!isLoading && products.length === 0 && (
+          <div className="border border-gray-200 bg-white rounded-xl p-6">
+            <div className="font-semibold text-gray-900">No products yet</div>
+            <div className="text-sm text-gray-600 mt-1">Create your first product to see it here.</div>
+            <button
+              className="mt-4 cursor-pointer inline-flex items-center justify-center rounded-md bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600/30"
+              onClick={() => navigate("/seller/addproduct")}
+            >
+              Add your first product
+            </button>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {products.map((p) => {
+            const isActive = p?.isActive === 1 || p?.isActive === "Active";
+            const cover = p?.images?.[0]?.imageUrl ? resolveImg(p.images[0].imageUrl) : null;
+
+            return (
+              <div
+                key={p.productId}
+                className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="flex gap-4">
+                  <div className="w-24 h-24 rounded-lg border border-gray-200 flex items-center justify-center overflow-hidden bg-gray-100 shrink-0">
+                    {cover ? (
+                      <img src={cover} alt={p.productName} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="text-xs text-gray-500">No Image</div>
+                    )}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="font-semibold text-gray-900 truncate">{p.productName}</div>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full ${
+                          isActive ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-700"
+                        }`}
+                      >
+                        {isActive ? "Active" : "Deactivate"}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-700 mt-1">Price: {p.price}</div>
+                    <div className="text-sm text-gray-700">Qty: {p.quantity}</div>
+                  </div>
                 </div>
 
-                <div className="flex-1">
-                  <div className="font-semibold">{p.productName}</div>
-                  <div className="text-sm">Price: {p.price}</div>
-                  <div className="text-sm">Qty: {p.quantity}</div>
-                  <div className="text-sm">Status: {isActive ? "Active" : "Deactivate"}</div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <button
+                    className="cursor-pointer inline-flex items-center justify-center rounded-md bg-blue-600 text-white px-3 py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600/30"
+                    onClick={() => navigate(`/seller/product/${p.productId}`)}
+                  >
+                    View Details
+                  </button>
+                  <button
+                    className="cursor-pointer inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-gray-900 px-3 py-2 hover:bg-gray-50 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-900/15"
+                    disabled={updatingId === p.productId}
+                    onClick={() => onToggleAvailability(p.productId, 1)}
+                  >
+                    Set Active
+                  </button>
+                  <button
+                    className="cursor-pointer inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-gray-900 px-3 py-2 hover:bg-gray-50 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-900/15"
+                    disabled={updatingId === p.productId}
+                    onClick={() => onToggleAvailability(p.productId, 2)}
+                  >
+                    Deactivate
+                  </button>
                 </div>
               </div>
-
-              <div className="mt-3 flex gap-2">
-                <button
-                  className="cursor-pointer border px-3 py-2 disabled:opacity-50"
-                  disabled={updatingId === p.productId}
-                  onClick={() => onToggleAvailability(p.productId, 1)}
-                >
-                  Set Active
-                </button>
-                <button
-                  className="cursor-pointer border px-3 py-2 disabled:opacity-50"
-                  disabled={updatingId === p.productId}
-                  onClick={() => onToggleAvailability(p.productId, 2)}
-                >
-                  Deactivate
-                </button>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
