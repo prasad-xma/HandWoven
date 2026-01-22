@@ -56,3 +56,8 @@ export const uploadProductImages = async (productId, files) => {
     });
     return response.data;
 };
+
+export const deleteProductImage = async (productImageId) => {
+    const response = await api.delete(`/seller/products/images/${productImageId}`);
+    return response.data;
+};
