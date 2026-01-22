@@ -57,15 +57,19 @@ const AddProduct = () => {
 
       if (!productId) {
         throw new Error("Missing productId from API response");
+        
       }
 
       setCreatedProductId(productId);
       toast.success(res?.message || "Product created");
       setStep(2);
+
     } catch (err) {
       toast.error(err?.response?.data?.message || err?.message || "Failed to create product");
+
     } finally {
       setIsSubmitting(false);
+
     }
   };
 
@@ -79,10 +83,12 @@ const AddProduct = () => {
     if (!createdProductId) {
       toast.error("Please create the product first");
       return;
+
     }
 
     if (!files.length) {
       toast.error("Please select at least one image");
+
       return;
     }
 
@@ -92,9 +98,12 @@ const AddProduct = () => {
       const res = await uploadProductImages(createdProductId, files);
       toast.success(res?.message || "Images uploaded");
       navigate("/seller/s-dashboard");
+
     } catch (err) {
+
       toast.error(err?.response?.data?.message || err?.message || "Failed to upload images");
     } finally {
+
       setIsSubmitting(false);
     }
   };
