@@ -112,7 +112,7 @@ const SellerDashboard = () => {
                           isActive ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-700"
                         }`}
                       >
-                        {isActive ? "Active" : "Deactivate"}
+                        {isActive ? "In Stock" : "Out of Stock"}
                       </span>
                     </div>
                     <div className="text-sm text-gray-700 mt-1">Price: {p.price}</div>
