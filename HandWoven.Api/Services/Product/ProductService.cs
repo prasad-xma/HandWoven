@@ -56,6 +56,16 @@ public class ProductService : IProductService
             .ToListAsync();
     }
 
+    public async Task<List<Product>> GetAllProductsAsync()
+    {
+        return await _context.Products
+            .Include(p => p.Images)
+            .Include(p => p.Promotions)
+            .Include(p => p.Shop)
+            .Where(p => p.isActive == ProductStatus.Active)
+            .ToListAsync();
+    }
+
     public async Task UpdateAvailabilityAsync(int sellerId, int productId, ProductStatus status)
     {
         var product = await _context.Products

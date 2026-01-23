@@ -7,6 +7,7 @@ public interface IProductService
 {
     Task<int> CreateProductAsync(int sellerId, ProductCreateDto dto);
     Task<List<Product>> GetMyProductAsync(int sellerId);
+    Task<List<Product>> GetAllProductsAsync();
     Task UpdateAvailabilityAsync(int sellerId, int productId, ProductStatus status);
     Task<Product> GetByIdAsync(int sellerId, int productId);
     Task UpdateProductAsync(int sellerId, int productId, ProductUpdateDto dto);
