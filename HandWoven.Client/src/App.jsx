@@ -12,29 +12,35 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import SellerRegister from './pages/SellerRegister';
 import SellerDashboard from './pages/SellerDashboard';
 import AddProduct from './pages/product/AddProduct';
-import ProductDetails from './pages/product/ProductDetails';
+import ProductDetails from './pages/ProductDetails';
+import SellerProductDetails from './pages/product/ProductDetails';
+import Navbar from './pages/components/Navbar';
 
 function App() {
 
   return (
 
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
-      <Route
-        path='/dashboard'
-        element={
-          <ProtectedRoute roles={["User", "Seller", "Admin", "SysManager"]}>
-            <Dashboard />
-          </ProtectedRoute>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route
+          path='/dashboard'
+          element={
+            <ProtectedRoute roles={["User", "Seller", "Admin", "SysManager"]}>
+              <Dashboard />
+            </ProtectedRoute>
 
-        } />
-        <Route path='/seller/register' element={<SellerRegister />} />
-        <Route path='/seller/s-dashboard' element={<SellerDashboard />} />
-        <Route path='/seller/addproduct' element={<AddProduct />} />
-        <Route path='/seller/product/:productId' element={<ProductDetails />} />
-    </Routes>
+          } />
+          <Route path='/seller/register' element={<SellerRegister />} />
+          <Route path='/seller/s-dashboard' element={<SellerDashboard />} />
+          <Route path='/seller/addproduct' element={<AddProduct />} />
+          <Route path='/seller/product/:productId' element={<SellerProductDetails />} />
+          <Route path='/product/:productId' element={<ProductDetails />} />
+      </Routes>
+    </>
 
   );
 }
