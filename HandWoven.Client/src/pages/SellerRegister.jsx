@@ -26,7 +26,7 @@ const SellerRegister = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
-        // Clear error for this field when user starts typing
+        
         if (errors[name]) {
             setErrors({ ...errors, [name]: '' });
         }
@@ -37,12 +37,19 @@ const SellerRegister = () => {
         
         if (step === 1) {
             if (!form.BusinessName.trim()) newErrors.BusinessName = 'Business name is required';
+
             if (!form.BusinessAddress.trim()) newErrors.BusinessAddress = 'Business address is required';
+
             if (!form.ContactPhone.trim()) newErrors.ContactPhone = 'Contact phone is required';
+
+
         } else if (step === 2) {
             if (!form.ShopName.trim()) newErrors.ShopName = 'Shop name is required';
+
             if (!form.Address.trim()) newErrors.Address = 'Shop address is required';
+
             if (!form.ShopContact.trim()) newErrors.ShopContact = 'Shop contact is required';
+
             if (!form.ShopEmail.trim()) {
                 newErrors.ShopEmail = 'Shop email is required';
             } else if (!/\S+@\S+\.\S+/.test(form.ShopEmail)) {
@@ -51,6 +58,7 @@ const SellerRegister = () => {
         }
         
         setErrors(newErrors);
+        
         return Object.keys(newErrors).length === 0;
     };
 
