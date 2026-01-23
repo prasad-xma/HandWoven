@@ -37,7 +37,7 @@ const ProductCard = ({ product, apiBaseUrl }) => {
       promo.isActive && new Date(promo.startDate) <= new Date() && new Date(promo.endDate) >= new Date()
     );
     
-    // Round the discount percentage to 2 decimal places
+    // 2 decimal places
     if (promotion && promotion.discountPercentage) {
       promotion.discountPercentage = Math.round(promotion.discountPercentage * 100) / 100;
     }
