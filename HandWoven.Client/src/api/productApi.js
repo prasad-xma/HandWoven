@@ -7,7 +7,15 @@ export const createProduct = async (productData) => {
 
 export const getProductById = async (productId) => {
     const response = await api.get(`/seller/product/${productId}`);
+    
     return response.data;
+};
+
+export const getPublicProductById = async (productId) => {
+    const response = await api.get("/products");
+    const products = response.data;
+    
+    return products.find(product => product.productId == productId);
 };
 
 export const updateProduct = async (productId, payload) => {
@@ -23,6 +31,7 @@ export const deleteProduct = async (productId) => {
 // Promotions
 export const listPromotions = async (productId) => {
     const response = await api.get(`/seller/product/${productId}/promotions`);
+    
     return response.data;
 };
 
@@ -43,6 +52,7 @@ export const getMyProducts = async () => {
 
 export const updateProductAvailability = async (productId, isActive) => {
     const response = await api.patch(`/seller/product/${productId}/availability`, { isActive });
+    
     return response.data;
 };
 
@@ -59,5 +69,12 @@ export const uploadProductImages = async (productId, files) => {
 
 export const deleteProductImage = async (productImageId) => {
     const response = await api.delete(`/seller/products/images/${productImageId}`);
+    return response.data;
+};
+
+export const getAllProducts = async () => {
+    const response = await api.get("/products");
+    // console.log(response.data);
+    
     return response.data;
 };
