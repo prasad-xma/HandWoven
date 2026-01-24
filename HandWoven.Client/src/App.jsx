@@ -15,6 +15,7 @@ import AddProduct from './pages/product/AddProduct';
 import ProductDetails from './pages/ProductDetails';
 import SellerProductDetails from './pages/product/ProductDetails';
 import Navbar from './pages/components/Navbar';
+import Cart from './pages/components/Cart';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
           <Route path='/seller/addproduct' element={<AddProduct />} />
           <Route path='/seller/product/:productId' element={<SellerProductDetails />} />
           <Route path='/product/:productId' element={<ProductDetails />} />
+          <Route path='/cart' element={<Cart />} />
       </Routes>
     </>
 
