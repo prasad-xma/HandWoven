@@ -24,6 +24,7 @@ const Navbar = () => {
     }
 
     if (role === "User") {
+      links.push({ label: "Cart", to: "/cart" });
       links.push({ label: "Become Seller", to: "/seller/register" });
     }
 
