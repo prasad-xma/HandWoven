@@ -119,14 +119,46 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Hero Banner */}
+      <div className="relative h-96 md:h-[500px] lg:h-[600px] overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="/src/assets/img/home/banner1.jpg" 
+            alt="HandWoven Banner" 
+            className="w-full h-full object-cover"
+          />
+          
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
+        </div>
+        
+        <div className="relative h-full flex items-center">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                Welcome to <span className="text-blue-300">HandWoven</span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed">
+                Discover unique handmade products crafted with love and care. 
+                Explore our exclusive collection with amazing deals and promotions!
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                  Shop Now
+                </button>
+                <button className="px-8 py-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold rounded-lg transition-all duration-300 border border-white/30">
+                  View Deals
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent"></div>
+      </div>
+
       {/* Main Content */}
       <div className="max-w-6xl mx-auto p-4 sm:p-6">
-        {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 mb-8 text-white">
-          <h1 className="text-3xl font-bold mb-2">Welcome to HandWoven</h1>
-          <p className="text-blue-100">Discover unique handmade products with exclusive deals and promotions!</p>
-        </div>
-
         {/* Products Section */}
         <div className="mb-6">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">
