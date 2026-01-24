@@ -1,13 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPublicProductById } from '../api/productApi';
+import { addToCart } from '../api/cartApi';
+import { AuthContext } from '../context/AuthContext';
 
 const ProductDetails = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [cartMessage, setCartMessage] = useState('');
 
   const apiBaseUrl = useMemo(() => {
     const base = import.meta.env?.VITE_API_BASE_URL;
@@ -87,11 +92,46 @@ const ProductDetails = () => {
     return promotion;
   };
 
-  const handleAddToCart = () => {
-    
-    console.log(`Adding ${quantity} of product ${productId} to cart`);
-    
-    alert(`Added ${quantity} item(s) to cart!`);
+  const handleAddToCart = async () => {
+    // Check if user is logged in
+    if (!user) {
+      setCartMessage('Please log in to add items to cart');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
+      return;
+    }
+
+    if (!product || !isActive) {
+      setCartMessage('Product is not available');
+      return;
+    }
+
+    try {
+      setAddingToCart(true);
+      setCartMessage('');
+      
+      await addToCart(parseInt(productId), quantity);
+      setCartMessage(`Successfully added ${quantity} item(s) to cart!`);
+      
+      // Clear message after 3 seconds
+      setTimeout(() => {
+        setCartMessage('');
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      if (error.response?.status === 401) {
+        setCartMessage('Please log in to add items to cart');
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
+      } else {
+        setCartMessage('Failed to add item to cart. Please try again.');
+      }
+    } finally {
+      setAddingToCart(false);
+    }
   };
 
   const handleGoBack = () => {
@@ -236,6 +276,17 @@ const ProductDetails = () => {
                 </p>
               </div>
 
+              {/* Cart Message */}
+              {cartMessage && (
+                <div className={`mb-4 p-3 rounded-lg text-sm ${
+                  cartMessage.includes('Successfully') 
+                    ? 'bg-green-50 text-green-700 border border-green-200' 
+                    : 'bg-red-50 text-red-700 border border-red-200'
+                }`}>
+                  {cartMessage}
+                </div>
+              )}
+
               {/* Quantity and Add to Cart */}
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center border border-gray-300 rounded-lg">
@@ -267,22 +318,55 @@ const ProductDetails = () => {
                 {/* Add to Cart Button */}
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2"
+                  disabled={addingToCart || !isActive}
+                  className={`flex-1 py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors ${
+                    !isActive 
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : addingToCart 
+                        ? 'bg-gray-400 text-gray-200 cursor-wait'
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  Add to Cart
+                  {addingToCart ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Adding...
+                    </>
+                  ) : !isActive ? (
+                    <>
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      Out of Stock
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
+                      </svg>
+                      Add to Cart
+                    </>
+                  )}
                 </button>
               </div>
 
