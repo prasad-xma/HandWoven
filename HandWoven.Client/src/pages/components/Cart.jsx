@@ -80,7 +80,7 @@ const Cart = () => {
             await clearCart();
             await fetchCart(); // Refresh cart
             // setError('');
-            
+
         } catch (err) {
             console.error('Failed to clear cart:', err);
             setError('Failed to clear cart. Please try again.');
@@ -90,8 +90,10 @@ const Cart = () => {
         }
     };
 
+    // continue shopping button
     const handleContinueShopping = () => {
         navigate('/');
+
     };
 
     const getImageUrl = (imageUrl) => {
