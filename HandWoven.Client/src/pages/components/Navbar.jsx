@@ -1,16 +1,20 @@
-import React, { useContext, useMemo, useState, useEffect } from "react";
+import React, { useContext, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { getCart } from "../../api/cartApi";
+// import { getCart } from "../../api/cartApi";
+
+import { CartContext } from "../../context/CartContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
-  const [cartItemCount, setCartItemCount] = useState(0);
+  // const [cartItemCount, setCartItemCount] = useState(0);
 
   const role = user?.role;
 
-  // Fetch cart item count
+  const { cartItemCount } = useContext(CartContext);
+
+  /*
   useEffect(() => {
     const fetchCartCount = async () => {
       if (user) {
@@ -27,7 +31,7 @@ const Navbar = () => {
     };
 
     fetchCartCount();
-  }, [user]);
+  }, [user]); */
 
   const items = useMemo(() => {
     const links = [{ label: "Home", to: "/" }];

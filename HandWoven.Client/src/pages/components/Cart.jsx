@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCart, updateCartItem, removeFromCart, clearCart } from '../../api/cartApi';
+
+import { CartContext } from '../../context/CartContext';
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -8,6 +10,8 @@ const Cart = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [updating, setUpdating] = useState(false);
+
+    const { refreshCartCount } = useContext(CartContext);
 
     // const apiBaseUrl = import.meta.env?.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:0000";
     const apiBaseUrl = "http://localhost:5057";
@@ -45,6 +49,8 @@ const Cart = () => {
             setUpdating(true);
             await updateCartItem(cartId, newQuantity);
             await fetchCart(); // Refresh cart
+            await refreshCartCount();
+
         } catch (err) {
             console.error('Failed to update quantity:', err);
             setError('Failed to update quantity. Please try again.');
@@ -61,6 +67,7 @@ const Cart = () => {
             setUpdating(true);
             await removeFromCart(cartId);
             await fetchCart(); // Refresh cart
+            await refreshCartCount();
 
         } catch (err) {
             console.error('Failed to remove item:', err);
@@ -79,6 +86,7 @@ const Cart = () => {
             setUpdating(true);
             await clearCart();
             await fetchCart(); // Refresh cart
+            await refreshCartCount();
             // setError('');
 
         } catch (err) {
