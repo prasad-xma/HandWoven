@@ -26,48 +26,48 @@ const ProductDetails = () => {
   }, []);
 
   useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        setLoading(true);
+        const data = await getPublicProductById(productId);
+        
+        if (data) {
+          setProduct(data);
+        } else {
+          
+          throw new Error('Product not found');
+        }
+
+      } catch (error) {
+        console.error('Failed to fetch product details:', error);
+        
+        setProduct({
+          productId: productId,
+          productName: "Handwoven Test Product",
+          description: "Beautiful handwoven product with intricate details and premium materials.",
+          price: 1200,
+          discountPrice: 100,
+          isActive: 1,
+          images: [
+            { imageUrl: "/uploads/products/sample.jpg" }
+          ],
+          promotions: [
+            {
+              promotionId: 1,
+              discountPercentage: 0.83,
+              startDate: "2026-01-22T00:00:00",
+              endDate: "2026-01-29T00:00:00",
+              isActive: true
+            }
+          ]
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProductDetails();
   }, [productId]);
-
-  const fetchProductDetails = async () => {
-    try {
-      setLoading(true);
-      const data = await getPublicProductById(productId);
-      
-      if (data) {
-        setProduct(data);
-      } else {
-        
-        throw new Error('Product not found');
-      }
-
-    } catch (error) {
-      console.error('Failed to fetch product details:', error);
-      
-      setProduct({
-        productId: productId,
-        productName: "Handwoven Test Product",
-        description: "Beautiful handwoven product with intricate details and premium materials.",
-        price: 1200,
-        discountPrice: 100,
-        isActive: 1,
-        images: [
-          { imageUrl: "/uploads/products/sample.jpg" }
-        ],
-        promotions: [
-          {
-            promotionId: 1,
-            discountPercentage: 0.83,
-            startDate: "2026-01-22T00:00:00",
-            endDate: "2026-01-29T00:00:00",
-            isActive: true
-          }
-        ]
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const calculateDiscountedPrice = (product) => {
     if (!product.promotions || product.promotions.length === 0) {
