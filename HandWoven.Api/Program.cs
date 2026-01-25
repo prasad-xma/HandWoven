@@ -10,6 +10,7 @@ using HandWoven.Api.Services.Seller;
 using HandWoven.Api.Services.Product;
 using HandWoven.Api.Services.Users;
 using HandWoven.Api.Services;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,11 +70,16 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<ISellerProductImageService, SellerProductImageService>();
 // product service
-builder.Services.AddScoped<IProductService, ProductService>();
+// builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductService, HandWoven.Api.Services.Product.ProductService>();
 // user service
 builder.Services.AddScoped<IUserService, UserService>();
 // cart service
 builder.Services.AddScoped<ICartService, CartService>();
+
+// sripe 
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 
 // Swagger (API Testing) ---------------------------------
