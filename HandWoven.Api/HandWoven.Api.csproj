@@ -26,6 +26,7 @@
     <Folder Include="Controllers\Product\" />
     <Folder Include="Controllers\Seller\" />
     <Folder Include="Data\" />
+    <Folder Include="DTOs\Payment\" />
     <Folder Include="DTOs\Product\" />
     <Folder Include="DTOs\Seller\" />
     <Folder Include="Helpers\" />
