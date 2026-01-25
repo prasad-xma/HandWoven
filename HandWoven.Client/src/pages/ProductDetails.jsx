@@ -4,6 +4,8 @@ import { getPublicProductById } from '../api/productApi';
 import { addToCart } from '../api/cartApi';
 import { AuthContext } from '../context/AuthContext';
 
+import { CartContext } from '../context/CartContext';
+
 const ProductDetails = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -13,6 +15,10 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
   const [cartMessage, setCartMessage] = useState('');
+
+  // cart context
+  const { refreshCartCount } = useContext(CartContext); 
+
 
   const apiBaseUrl = useMemo(() => {
     const base = import.meta.env?.VITE_API_BASE_URL;
@@ -112,6 +118,7 @@ const ProductDetails = () => {
       setCartMessage('');
       
       await addToCart(parseInt(productId), quantity);
+      await refreshCartCount();
       setCartMessage(`Successfully added ${quantity} item(s) to cart!`);
       
       // Clear message after 3 seconds
