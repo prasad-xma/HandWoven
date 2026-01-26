@@ -28,6 +28,12 @@ export const CartProvider = ({ children }) => {
         }
     }, [user]);
 
+    // reset the cart after payment
+    const resetCart = () => {
+        setCart(null);
+        setCartItemCount(0);
+    }
+
     useEffect(() => {
         const loadCart = async () => {
             await fetchCart();
@@ -42,7 +48,8 @@ export const CartProvider = ({ children }) => {
             value={{
                 cart,
                 fetchCart,
-                cartItemCount
+                cartItemCount,
+                resetCart
             }}
         >
             {children}
