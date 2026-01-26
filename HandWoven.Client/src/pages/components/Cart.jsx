@@ -1,26 +1,28 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCart, updateCartItem, removeFromCart, clearCart } from '../../api/cartApi';
+import { updateCartItem, removeFromCart, clearCart } from '../../api/cartApi';
 
 import { CartContext } from '../../context/CartContext';
 
 const Cart = () => {
     const navigate = useNavigate();
-    const [cart, setCart] = useState(null);
-    const [loading, setLoading] = useState(true);
+    // const [cart, setCart] = useState(null);
+    // const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [updating, setUpdating] = useState(false);
 
-    const { refreshCartCount } = useContext(CartContext);
+    const { fetchCart, cart } = useContext(CartContext);
 
     // const apiBaseUrl = import.meta.env?.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:0000";
     const apiBaseUrl = "http://localhost:5057";
 
+    
     useEffect(() => {
         fetchCart();
 
-    }, []);
+    }, [fetchCart]); 
 
+    /*
     const fetchCart = async () => {
         try {
             setLoading(true);
@@ -40,7 +42,7 @@ const Cart = () => {
             setLoading(false);
 
         }
-    };
+    }; */
 
     const handleQuantityChange = async (cartId, newQuantity) => {
         if (newQuantity < 1) return;
@@ -49,7 +51,7 @@ const Cart = () => {
             setUpdating(true);
             await updateCartItem(cartId, newQuantity);
             await fetchCart(); // Refresh cart
-            await refreshCartCount();
+            await fetchCart();
 
         } catch (err) {
             console.error('Failed to update quantity:', err);
@@ -67,7 +69,7 @@ const Cart = () => {
             setUpdating(true);
             await removeFromCart(cartId);
             await fetchCart(); // Refresh cart
-            await refreshCartCount();
+            await fetchCart();
 
         } catch (err) {
             console.error('Failed to remove item:', err);
@@ -86,7 +88,7 @@ const Cart = () => {
             setUpdating(true);
             await clearCart();
             await fetchCart(); // Refresh cart
-            await refreshCartCount();
+            await fetchCart();
             // setError('');
 
         } catch (err) {
@@ -111,13 +113,13 @@ const Cart = () => {
             : `${apiBaseUrl}${imageUrl}`;
     };
 
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-gray-50 flex justify-center items-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
-        );
-    }
+    // if (!loading) {
+    //     return (
+    //         <div className="min-h-screen bg-gray-50 flex justify-center items-center">
+    //             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    //         </div>
+    //     );
+    // }
 
     if (error && error.includes('Please log in')) {
         return (
@@ -310,6 +312,7 @@ const Cart = () => {
 
                                 <button
                                     className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
+                                    onClick={() => navigate("/checkout")}
                                     disabled={updating}
                                 >
                                     Proceed to Checkout
