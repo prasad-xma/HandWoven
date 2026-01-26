@@ -17,7 +17,7 @@ const ProductDetails = () => {
   const [cartMessage, setCartMessage] = useState('');
 
   // cart context
-  const { refreshCartCount } = useContext(CartContext); 
+  const { fetchCart } = useContext(CartContext); 
 
 
   const apiBaseUrl = useMemo(() => {
@@ -118,7 +118,7 @@ const ProductDetails = () => {
       setCartMessage('');
       
       await addToCart(parseInt(productId), quantity);
-      await refreshCartCount();
+      await fetchCart();
       setCartMessage(`Successfully added ${quantity} item(s) to cart!`);
       
       // Clear message after 3 seconds
