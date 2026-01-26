@@ -16,6 +16,7 @@ import ProductDetails from './pages/ProductDetails';
 import SellerProductDetails from './pages/product/ProductDetails';
 import Navbar from './pages/components/Navbar';
 import Cart from './pages/components/Cart';
+import Checkout from './pages/PaymentGateway/Checkout';
 
 function App() {
 
@@ -41,6 +42,8 @@ function App() {
           <Route path='/seller/product/:productId' element={<SellerProductDetails />} />
           <Route path='/product/:productId' element={<ProductDetails />} />
           <Route path='/cart' element={<Cart />} />
+          {/* payment */}
+          <Route path='/checkout' element={<Checkout />}/>
       </Routes>
     </>
 
