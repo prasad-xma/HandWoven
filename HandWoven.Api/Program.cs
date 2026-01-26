@@ -10,7 +10,10 @@ using HandWoven.Api.Services.Seller;
 using HandWoven.Api.Services.Product;
 using HandWoven.Api.Services.Users;
 using HandWoven.Api.Services;
+
 using Stripe;
+
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,9 +81,15 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICartService, CartService>();
 
 // sripe 
+Env.Load();
+
+var stripeSecretKey = builder.Configuration["STRIPE_SECRET_KEY"];
+Stripe.StripeConfiguration.ApiKey = stripeSecretKey;
+
+/*
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
-
+*/
 
 // Swagger (API Testing) ---------------------------------
 builder.Services.AddEndpointsApiExplorer();
