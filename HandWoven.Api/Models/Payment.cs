@@ -1,9 +1,11 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace HandWoven.Api.Models;
 
 public class Payment
 {
+    [Key]
     public int PaymentId { get; set; }
     public int OrderId { get; set; }
 
