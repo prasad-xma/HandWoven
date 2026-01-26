@@ -83,8 +83,7 @@ builder.Services.AddScoped<ICartService, CartService>();
 // sripe 
 Env.Load();
 
-var stripeSecretKey = builder.Configuration["STRIPE_SECRET_KEY"];
-Stripe.StripeConfiguration.ApiKey = stripeSecretKey;
+StripeConfiguration.ApiKey = Environment.GetEnvironmentVariable("STRIPE_SECRET_KEY");
 
 /*
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
