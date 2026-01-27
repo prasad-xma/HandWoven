@@ -24,6 +24,7 @@
   <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Controllers\Order\" />
     <Folder Include="Controllers\Product\" />
     <Folder Include="Controllers\Seller\" />
     <Folder Include="Data\" />
