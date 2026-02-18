@@ -24,6 +24,9 @@ public class Order
     public OrderStatus OrderStatus { get; set; }
     public PaymentMethod PaymentMethod { get; set; }
 
+    // stripe payment intent id
+    public string? PaymentIntentId { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 
