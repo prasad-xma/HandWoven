@@ -14,7 +14,7 @@ using HandWoven.Api.Services;
 using Stripe;
 
 using DotNetEnv;
-using HandWoven.Api.Services.Order;
+// using HandWoven.Api.Services.Order;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,7 +81,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 // cart service
 builder.Services.AddScoped<ICartService, CartService>();
 // shipping service
-builder.Services.AddScoped<IShippingAdService, ShippingAddressService>();
+// builder.Services.AddScoped<IShippingAdService, ShippingAddressService>();
 
 // sripe 
 Env.Load();
