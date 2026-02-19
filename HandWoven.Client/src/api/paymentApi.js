@@ -10,3 +10,8 @@ export const createPaymentIntent = async(amount) => {
 
     return res.data;
 };
+
+export const confirmPayment = async (paymentIntentId) => {
+    const response = await api.post('/payment/confirm', { paymentIntentId });
+    return response.data;
+}
